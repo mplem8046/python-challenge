@@ -29,7 +29,7 @@ with open(budget_csv,"r") as csvfile:
     old_prof_month = ""
     old_loss = 0
     old_prof = 0
-
+    delta_list = []
 
 # Need to skip first row as it is the header
 
@@ -42,15 +42,27 @@ with open(budget_csv,"r") as csvfile:
 
             count += 1
 # set the first found date value to initialize the value of the held max profit & loss months.
-# This is subsequently updated based upon the folowing two if statements.
+# This is subsequently updated based upon the following two if statements.
 
             if count == 1:
                 old_loss_month = row[0]
                 old_prof_month = row[0]
+                delta_list = [0]
+
                     
             total = total + int(row[1])
-            delta = int(row[1]) - int(old_val)                    
-            sum_delta = sum_delta + delta
+
+            if count >= 2:
+                delta = int(row[1]) - int(old_val) 
+                delta_list.append(int(delta))
+
+            # print(delta)
+
+            # Initialize or append to a list for the deltas??
+                             
+            # sum_delta = sum_delta + delta
+
+            # print(f"Sum delta {sum_delta} Delta  {delta}")
 
 # The greatest decrease in profits (date and amount) over the entire period. Compare monthly deltas
 # If lesser update variables - month and current delta
@@ -83,9 +95,12 @@ with open(budget_csv,"r") as csvfile:
 # the entire period and then calculate the average of those. Possibly create a list and append
 # the monthly delta then divide by the length of the list??
 
-# !This is not working properly, something wrong with the calc of sum_delta!
+# This was not working properly, something wrong with the calc of sum_delta. 
+# Fixed on line 55 - was including line one invalid calc
 
-    avg_delta = round(sum_delta / count,2)
+    avg_delta = round(sum(delta_list)/(len(delta_list)-1),2)
+
+    # avg_delta =- round(sum_delta / count,2)
 
     print(f"Average Change :${avg_delta}")
     # print(f"Sum delta : ${sum_delta}")
