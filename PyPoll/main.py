@@ -1,9 +1,9 @@
 # Python script for analysing the financial records of a company
 # Requirements
 # The total number of votes cast. Done
-# A complete list of candidates who received votes. Identified
-# The percentage of votes each candidate won
-# The total number of votes each candidate won. Identified
+# A complete list of candidates who received votes. Done
+# The percentage of votes each candidate won. Done
+# The total number of votes each candidate won. Done
 # The winner of the election based on popular vote. Done
 
 import os
@@ -12,6 +12,10 @@ import csv
 # Define path of source file
 
 election_csv = os.path.join("PyPoll","Resources","election_data.csv")
+
+# Define location and name for output file
+
+PyPollAnalysis = os.path.join("PyPoll","analysis","PyPoll_Out.txt")
 
 # Not sure if I'm going to need this but will create it now anyway
 
@@ -59,7 +63,15 @@ with open(election_csv,"r") as csvfile:
     print(f"Total Votes: {count}")
     print("-------------------------")
 
-    # Next is to use this list to run a count of how many votes each received and create another list to zip together
+    with open (PyPollAnalysis,'w') as f:
+        f.write("Election Results" + "\n")
+        f.write("----------------------------" + "\n")
+        f.write("Total Votes: " + str(count) + "\n")
+        f.write("----------------------------" + "\n")
+
+
+    # Next is to use this list to run a count of how many votes each received and create another list to zip 
+    # together if needed
     # The file will be scanned multiple times, once for each candidate
 
     vote_tally = []
@@ -79,19 +91,27 @@ with open(election_csv,"r") as csvfile:
                     vote_count += 1
        
         vote_tally.append(vote_count)
-        percentage = round(vote_count/count*100,3)
+        percentage = round(vote_count/count*100,5)
 
         print(f"{name}: {percentage}% ({vote_count})")
+        with open (PyPollAnalysis,'a') as f:
+            f.write((name) + " " + str((percentage)) +"% (" + str((vote_count)) +")" + "\n")
+
+
 
         if vote_count > vote_count_old:
             vote_count_old = vote_count
             winner = name
 
-    # Next step is to zip the two lists together, calculate percentages & report results 
-    # Preferably ordered highest to lowest
- 
+# Next two lines were used initially to check code logic
 # print(unique_candidates)
 # print(vote_tally)
+
 print("-------------------------")
 print(f"Winner: {winner}")
 print("-------------------------")
+
+with open (PyPollAnalysis,'a') as f:
+    f.write("-------------------------" + "\n")
+    f.write("Winner: " + (winner) + "\n")
+    f.write("-------------------------" + "\n")
