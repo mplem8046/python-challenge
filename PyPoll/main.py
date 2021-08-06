@@ -57,6 +57,8 @@ with open(election_csv,"r") as csvfile:
     
     unique_candidates = list(set(candidate_list))
 
+    # print the results summary thus far and start writing the output file
+
     print("")
     print("Election Results")
     print("-------------------------")
@@ -70,7 +72,7 @@ with open(election_csv,"r") as csvfile:
         f.write("----------------------------" + "\n")
 
 
-    # Next is to use this list to run a count of how many votes each received and create another list to zip 
+    # Next is to use the unique_candidates list to run a count of how many votes each received and create another list to zip 
     # together if needed
     # The file will be scanned multiple times, once for each candidate
 
@@ -91,13 +93,16 @@ with open(election_csv,"r") as csvfile:
                     vote_count += 1
        
         vote_tally.append(vote_count)
-        percentage = round(vote_count/count*100,5)
+        percentage = (vote_count/count*100)
 
-        print(f"{name}: {percentage}% ({vote_count})")
+        # print the result with percentage reported to 3 decimal places
+
+        print(f"{name}: {percentage:.3f}% ({vote_count})")
+
+        # write the same record to the output file.
+
         with open (PyPollAnalysis,'a') as f:
-            f.write((name) + " " + str((percentage)) +"% (" + str((vote_count)) +")" + "\n")
-
-
+            f.write((name) + ": " + str("{0:.3f}".format(percentage)) +"% (" + str((vote_count)) +")" + "\n")
 
         if vote_count > vote_count_old:
             vote_count_old = vote_count
